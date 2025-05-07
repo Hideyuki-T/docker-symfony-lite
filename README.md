@@ -22,7 +22,7 @@
 ├── docker-compose.yml
 ├── README.md
 └── app  
-    ├── bin  //実行用スクリプトを格納
+    ├── bin          //実行用スクリプトを格納
     │   └── console  //SymfonyのCLIコマンド実行の起点となるスクリプト
     ├── composer.json  //メタ情報を記述する構成ファイル
     ├── composer.lock  //環境間の再現性を担保
@@ -33,16 +33,16 @@
     │   ├── routes
     │   ├── routes.yaml
     │   └── services.yaml
-    ├── public  //ドキュメントルート（Webルート）として設定される
+    ├── public         //ドキュメントルート（Webルート）として設定される
     │   └── index.php  //リクエストエントリーポイント
     ├── src
     │   ├── Controller
     │   └── Kernel.php
     ├── symfony.lock  //再インストール時の構成整合性を保証
-    ├── var  //一時的なストレージ領域
+    ├── var           //一時的なストレージ領域
     │   ├── cache
     │   └── log
-    └── vendor  //全ての外部パッケージ（依存ライブラリ）が格納
+    └── vendor  //全ての外部パッケージ（依存ライブラリ）を格納
         ├── autoload_runtime.php
         ├── autoload.php
         ├── bin
