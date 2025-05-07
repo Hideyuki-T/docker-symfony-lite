@@ -1,0 +1,44 @@
+services:
+  app:
+    container_name: docker-symfony-lite_app
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    volumes:
+      - ./src:/var/www/html
+    environment:
+      DB_CONNECTION: mysql
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_DATABASE: docker-symfony-lite
+      DB_USERNAME: me
+      DB_PASSWORD: 54321
+
+
+  web:
+    container_name: docker-symfony-lite_nginx
+    image: nginx:latest
+    ports:
+      - "8083:80"
+    depends_on:
+      - app
+    volumes:
+      - ./src:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+
+  db:
+    container_name: docker-symfony-lite_db
+    image: mysql:8.0
+    ports:
+      - ":3306"
+    environment:
+      MYSQL_DATABASE: docker-symfony-lite
+      MYSQL_USER: me
+      MYSQL_PASSWORD: 54321
+      MYSQL_ROOT_PASSWORD: 12345
+      TZ: 'Asia/Tokyo'
+    volumes:
+      - mysql-volume:/var/lib/mysql
+
+volumes:
+  mysql-volume:
