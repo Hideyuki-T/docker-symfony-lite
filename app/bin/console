@@ -4,16 +4,20 @@
 use App\Kernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;
 
+# 依存パッケージの存在確認
 if (!is_dir(dirname(__DIR__).'/vendor')) {
     throw new LogicException('Dependencies are missing. Try running "composer install".');
 }
 
+# autoload_runtime.php の確認
 if (!is_file(dirname(__DIR__).'/vendor/autoload_runtime.php')) {
     throw new LogicException('Symfony Runtime is missing. Try running "composer require symfony/runtime".');
 }
 
+# クラスの自動読み込みと、Symfony Runtimeの起動処理を組み込む。
 require_once dirname(__DIR__).'/vendor/autoload_runtime.php';
 
+# 無名関数（クロージャ）を返すことで、アプリケーションの実体を起動
 return function (array $context) {
     $kernel = new Kernel($context['APP_ENV'], (bool) $context['APP_DEBUG']);
 
