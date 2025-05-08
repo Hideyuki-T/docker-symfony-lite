@@ -52,6 +52,66 @@
 ```
 
 
+### Symfonyリクエスト処理フロー
+```
+Browser
+  ↓
+Nginx → public/index.php
+         └── app/public/index.php
+             └─【入口】Symfony Runtime起動スクリプト
+             └─ require vendor/autoload_runtime.php
+
+```
+```
+Symfony Runtime
+  ↓
+App Kernel（アプリケーションの核）
+         └── app/src/Kernel.php
+             └─ extends Symfony\Component\HttpKernel\Kernel
+             └─ use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait
+             └─ function configureRoutes() / configureContainer() がここに
+
+```
+```
+Kernel::boot() / Kernel::handle(Request)
+  ↓
+HttpKernel に処理が移る
+         └── vendor/symfony/http-kernel/HttpKernel.php
+             └─ function handle(Request $request, $type, $catch)
+             └─ calls $this->router->match($request)
+
+```
+```
+ルーティング解析
+  ↓
+config/routes/
+         ├── app/config/routes.yaml（YAMLベース）
+         ├── あるいはアノテーション：
+             app/src/Controller/◯◯Controller.php
+             └─ #[Route('/', name: 'home')] など
+         └── 読み込み設定は：
+             app/config/routes.yaml にて resource 指定
+```
+```
+コントローラーが実行される
+  ↓
+Controller
+         └── app/src/Controller/WelcomeController.php（例）
+             └─ public function index(): Response
+
+```
+```
+レスポンス生成
+  ↓
+戻っていく流れ
+         └── HttpKernel が Response を index.php に返却
+             └── index.php が echo/return で出力
+  ↓
+Browser にHTML等が表示される
+
+```
+
+
 ### Symfony 構成哲学
 #### 「コードはすべて src/ に閉じ込めよ」設計思想が根幹にある。
 <table>
